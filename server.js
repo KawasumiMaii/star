@@ -47,12 +47,7 @@ const server = http.createServer((req, res) => {
     else if (req.url.startsWith('/api/character?name=')) {
         const characterName = new URL(req.url, `http://${req.headers.host}`).searchParams.get('name');
         // 使用 LEFT JOIN 查询角色信息和对应的命途名称
-        const query = `
-            SELECT c.name, d.name AS destinyName, c.health, c.attack, c.defense, c.speed, c.energy
-            FROM character c
-            LEFT JOIN destiny d ON c.destiny_id = d.id
-            WHERE c.name = ?
-        `;
+        const query = `SELECT name, destiny, health, attack, defense, speed, energy FROM character WHERE name = ?`;
         db.get(query, [characterName], (err, row) => {
             if (err) {
                 res.statusCode = 500;
@@ -66,6 +61,40 @@ const server = http.createServer((req, res) => {
                 res.statusCode = 404;
                 res.setHeader('Content-Type', 'text/plain');
                 res.end('Character not found');
+            }
+        });
+    }
+    // 处理 /api/lightcones 请求，获取所有光锥名称
+    else if (req.url === '/api/lightcones') {
+        db.all("SELECT name FROM light_cone", (err, rows) => {
+            if (err) {
+                res.statusCode = 500;
+                res.setHeader('Content-Type', 'text/plain');
+                res.end('Database error');
+            } else {
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.end(JSON.stringify(rows));
+            }
+        });
+    }
+    // 处理 /api/lightcone 请求，根据名称获取光锥信息
+    else if (req.url.startsWith('/api/lightcone?name=')) {
+        const lightConeName = new URL(req.url, `http://${req.headers.host}`).searchParams.get('name');
+        const query = `SELECT name, destiny, health, attack, defense, description FROM light_cone WHERE name = ?`;
+        db.get(query, [lightConeName], (err, row) => {
+            if (err) {
+                res.statusCode = 500;
+                res.setHeader('Content-Type', 'text/plain');
+                res.end('Database error');
+            } else if (row) {
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.end(JSON.stringify(row));
+            } else {
+                res.statusCode = 404;
+                res.setHeader('Content-Type', 'text/plain');
+                res.end('Light cone not found');
             }
         });
     }
