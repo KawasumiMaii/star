@@ -52,15 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
 
-    function updateLightConeDetails(lightCone) {
-        lightConeDetails.name.textContent = lightCone.name;
-        lightConeDetails.destiny.textContent = lightCone.destiny;
-        lightConeDetails.health.textContent = lightCone.health;
-        lightConeDetails.attack.textContent = lightCone.attack;
-        lightConeDetails.defense.textContent = lightCone.defense;
-        lightConeDetails.description.textContent = lightCone.description;
-    }
-
     function updateCharacterDetails(character) {
         characterDetails.name.textContent = character.name;
         characterDetails.destiny.textContent = character.destiny;
@@ -69,6 +60,16 @@ document.addEventListener('DOMContentLoaded', () => {
         characterDetails.defense.textContent = character.defense;
         characterDetails.speed.textContent = character.speed;
         characterDetails.energy.textContent = character.energy;
+    }
+
+
+    function updateLightConeDetails(lightCone) {
+        lightConeDetails.name.textContent = lightCone.name;
+        lightConeDetails.destiny.textContent = lightCone.destiny;
+        lightConeDetails.health.textContent = lightCone.health;
+        lightConeDetails.attack.textContent = lightCone.attack;
+        lightConeDetails.defense.textContent = lightCone.defense;
+        lightConeDetails.description.textContent = lightCone.description;
     }
 
     fetch('/api/characters')

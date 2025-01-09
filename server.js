@@ -81,7 +81,7 @@ const server = http.createServer((req, res) => {
     // 处理 /api/lightcone 请求，根据名称获取光锥信息
     else if (req.url.startsWith('/api/lightcone?name=')) {
         const lightConeName = new URL(req.url, `http://${req.headers.host}`).searchParams.get('name');
-        const query = `SELECT name, destiny, health, attack, defense, description FROM light_cone WHERE name = ?`;
+        const query = `SELECT name, health, destiny, attack, defense, description FROM light_cone WHERE name = ?`;
         db.get(query, [lightConeName], (err, row) => {
             if (err) {
                 res.statusCode = 500;
