@@ -38,11 +38,19 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch('/api/characters')
         .then(response => response.json())
         .then(characters => {
-            characters.forEach(character => {
+            // 清除“请选择角色”选项
+            characterNameSelect.innerHTML = '';
+            characters.forEach((character, index) => {
                 const option = document.createElement('option');
                 option.value = character.name;
                 option.textContent = character.name;
                 characterNameSelect.appendChild(option);
+                // 默认选择第一个角色
+                if (index === 0) {
+                    characterNameSelect.value = character.name;
+                    fetchCharacterData(character.name)
+                        .then(characterData => updateCharacterDetails(characterData));
+                }
             });
             characterNameSelect.disabled = false;
         })
