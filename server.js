@@ -14,8 +14,6 @@ const db = new sqlite3.Database('characters.db', (err) => {
         console.log('Connected to the database.');
     }
 });
-
-// 创建 HTTP 服务器
 const server = http.createServer((req, res) => {
     // 处理根路由请求，返回 index.html
     if (req.url === '/') {
@@ -48,8 +46,14 @@ const server = http.createServer((req, res) => {
     // 处理 /api/character 请求，根据名称获取角色信息
     else if (req.url.startsWith('/api/character?name=')) {
         const characterName = new URL(req.url, `http://${req.headers.host}`).searchParams.get('name');
-        // 优化数据库查询，只查询需要的字段
-        db.get("SELECT name, health, attack, defense, speed, energy FROM character WHERE name = ?", [characterName], (err, row) => {
+        // 使用 LEFT JOIN 查询角色信息和对应的命途名称
+        const query = `
+            SELECT c.name, c.health, c.attack, c.defense, c.speed, c.energy, d.name AS destinyName
+            FROM character c
+            LEFT JOIN destiny d ON c.destiny_id = d.id
+            WHERE c.name = ?
+        `;
+        db.get(query, [characterName], (err, row) => {
             if (err) {
                 res.statusCode = 500;
                 res.setHeader('Content-Type', 'text/plain');
@@ -65,7 +69,7 @@ const server = http.createServer((req, res) => {
             }
         });
     }
-    // 优化静态文件处理
+    // 处理静态文件请求
     else {
         const extname = path.extname(req.url);
         const contentTypeMap = {

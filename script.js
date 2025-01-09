@@ -6,7 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
         attack: document.querySelector('.attack'),
         defense: document.querySelector('.defense'),
         speed: document.querySelector('.speed'),
-        energy: document.querySelector('.energy')
+        energy: document.querySelector('.energy'),
+        destiny: document.querySelector('.destiny')
     };
 
     function updateCharacterDetails(character) {
@@ -16,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
         characterDetails.defense.textContent = character.defense;
         characterDetails.speed.textContent = character.speed;
         characterDetails.energy.textContent = character.energy;
+        characterDetails.destiny.textContent = character.destinyName;
     }
 
     function fetchCharacterData(name) {
@@ -34,37 +36,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     fetch('/api/characters')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            data.forEach(character => {
+        .then(response => response.json())
+        .then(characters => {
+            characters.forEach(character => {
                 const option = document.createElement('option');
                 option.value = character.name;
                 option.textContent = character.name;
                 characterNameSelect.appendChild(option);
             });
-
-            if (data.length > 0) {
-                characterNameSelect.value = data[0].name;
-                return fetchCharacterData(data[0].name);
-            } else {
-                throw new Error('No character data found');
-            }
+            characterNameSelect.disabled = false;
         })
-        .then(updateCharacterDetails)
         .catch(error => {
             console.error('Error:', error);
+            alert('Failed to fetch character list. Please try again later.');
         });
 
     characterNameSelect.addEventListener('change', () => {
-        const selectedName = characterNameSelect.value;
-        if (selectedName) {
-            fetchCharacterData(selectedName)
-                .then(updateCharacterDetails);
-        }
+        const selectedCharacterName = characterNameSelect.value;
+        fetchCharacterData(selectedCharacterName)
+            .then(characterData => updateCharacterDetails(characterData));
     });
 });
