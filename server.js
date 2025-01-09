@@ -48,7 +48,7 @@ const server = http.createServer((req, res) => {
         const characterName = new URL(req.url, `http://${req.headers.host}`).searchParams.get('name');
         // 使用 LEFT JOIN 查询角色信息和对应的命途名称
         const query = `
-            SELECT c.name, c.health, c.attack, c.defense, c.speed, c.energy, d.name AS destinyName
+            SELECT c.name, d.name AS destinyName, c.health, c.attack, c.defense, c.speed, c.energy
             FROM character c
             LEFT JOIN destiny d ON c.destiny_id = d.id
             WHERE c.name = ?

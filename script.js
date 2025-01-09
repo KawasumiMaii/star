@@ -2,22 +2,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const characterNameSelect = document.getElementById('characterName');
     const characterDetails = {
         name: document.querySelector('.character-name'),
+        destiny: document.querySelector('.destiny'),
         health: document.querySelector('.health'),
         attack: document.querySelector('.attack'),
         defense: document.querySelector('.defense'),
         speed: document.querySelector('.speed'),
-        energy: document.querySelector('.energy'),
-        destiny: document.querySelector('.destiny')
+        energy: document.querySelector('.energy')
     };
 
     function updateCharacterDetails(character) {
         characterDetails.name.textContent = character.name;
+        characterDetails.destiny.textContent = character.destinyName;
         characterDetails.health.textContent = character.health;
         characterDetails.attack.textContent = character.attack;
         characterDetails.defense.textContent = character.defense;
         characterDetails.speed.textContent = character.speed;
         characterDetails.energy.textContent = character.energy;
-        characterDetails.destiny.textContent = character.destinyName;
     }
 
     function fetchCharacterData(name) {
