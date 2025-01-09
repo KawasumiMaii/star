@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="星穹铁道角色属性">
+    <title>星穹铁道角色属性</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.4/css/bulma.min.css">
+    <script src="script.js"></script>
+</head>
+<body>
+    <header class="section">
+        <div class="container">
+            <h1 class="title">角色属性</h1>
+        </div>
+    </header>
+    <main>
+        <section class="section">
+            <div class="container">
+                <div class="columns">
+                    <div class="column is-one-third">
+                        <div class="field">
+                            <label class="label" for="characterName">选择角色</label>
+                            <div class="control">
+                                <div class="select is-fullwidth">
+                                    <select id="characterName">
+                                        <option disabled selected>请选择角色</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="columns">
+                    <div class="column is-one-third">
+                        <div class="card">
+                            <div class="card-content">
+                                <p class="title is-4"><span class="character-name"></span></p>
+                                <div class="content">
+                                    <p><strong>生命值:</strong> <span class="health"></span></p>
+                                    <p><strong>攻击力:</strong> <span class="attack"></span></p>
+                                    <p><strong>防御力:</strong> <span class="defense"></span></p>
+                                    <p><strong>速度:</strong> <span class="speed"></span></p>
+                                    <p><strong>能量:</strong> <span class="energy"></span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
