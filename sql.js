@@ -5,7 +5,6 @@ const db = new sqlite3.Database('characters.db');
 db.serialize(() => {
     db.run("DROP TABLE IF EXISTS character");
     db.run("CREATE TABLE character (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT UNIQUE, destiny TEXT, health INTEGER, attack INTEGER, defense INTEGER, speed INTEGER, energy INTEGER)");
-
     const stmt = db.prepare("INSERT INTO character (name, destiny, health, attack, defense, speed, energy) VALUES (?, ?, ?, ?, ?, ?, ?)");
     stmt.run("开拓者•毁灭", "毁灭", 1203, 620, 460, 100, 120);
     stmt.finalize();

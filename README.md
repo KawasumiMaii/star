@@ -28,6 +28,7 @@
     ```bash
     node sql.js
     ```
+   这将创建 `characters.db` 文件并插入初始数据。
 3. 启动服务器：
 
     ```bash
@@ -42,17 +43,11 @@
 -   `/api/characters`: 获取所有角色名称列表。
     -   返回格式：`[{"name": "角色1"}, {"name": "角色2"}, ...]`
 -   `/api/character?name=<角色名>`: 根据名称获取角色信息。
-    -   返回格式：`{"id": 1, "name": "角色名", "health": 1000, "attack": 500, "defense": 400, "speed": 90, "energy": 100}`
-    -   如果角色不存在，返回 404 错误。
-
-## 优化建议
-
--   使用模板引擎渲染前端页面。
--   使用构建工具打包和压缩代码。
--   添加更完善的错误处理和用户提示。
--   使用 Express.js 等框架管理路由。
--   添加测试代码。
--   考虑安全性问题。
+    -   返回格式：`{"id": 1, "name": "角色名", "destiny": "毁灭", "health": 1000, "attack": 500, "defense": 400, "speed": 90, "energy": 100}`
+-   `/api/light_cones`: 获取所有光锥名称列表。
+    -   返回格式：`[{"name": "光锥1"}, {"name": "光锥2"}, ...]`
+-   `/api/light_cone?name=<光锥名>`: 根据名称获取光锥信息。
+    -   返回格式：`{"id": 1, "name": "光锥名", "destiny": "毁灭", "health": 1000, "attack": 500, "defense": 400, "description": "光锥描述"}`
 
 ## 贡献
 
