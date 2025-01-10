@@ -31,16 +31,16 @@ const server = http.createServer((req, res) => {
     }
     // 处理 /api/characters 请求，获取所有角色名
     else if (req.url === '/api/characters') {
-        db.all("SELECT name FROM character", (err, rows) => {
+        fs.readFile(csvFilePath, 'utf8', (err, data) => {
             if (err) {
-                res.statusCode = 500;
-                res.setHeader('Content-Type', 'text/plain');
-                res.end('Database error');
-            } else {
-                res.statusCode = 200;
-                res.setHeader('Content-Type', 'application/json');
-                res.end(JSON.stringify(rows));
+                res.writeHead(500, { 'Content-Type': 'text/plain' });
+                res.end('Error reading CSV file');
+                return;
             }
+            const characters = parseCSV(data);
+            console.log(characters);
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify(characters.map(c => ({ name: c.name }))));
         });
     }
     // 处理 /api/character 请求，根据名称获取角色信息
@@ -148,3 +148,16 @@ process.on('SIGINT', () => {
         process.exit(0);
     });
 });
+
+function parseCSV(data) {
+    const lines = data.split('\n');
+    const headers = lines[0].split(',');
+    return lines.slice(1).map(line => {
+        const values = line.split(',');
+        let character = {};
+        headers.forEach((header, index) => {
+            character[header.trim()] = values[index].trim();
+        });
+        return character;
+    });
+}

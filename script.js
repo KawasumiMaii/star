@@ -22,19 +22,37 @@ document.addEventListener('DOMContentLoaded', () => {
         description: document.querySelector('.lightcone-description')
     };
 
-    function fetchCharacterData(name) {
-        return fetch(`/api/character?name=${name}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Failed to fetch character data. Please try again later.');
-                throw error;
+    function fetchCharacterData() {
+        fetch('data/role.csv')
+            .then(response => response.text())
+            .then(data => {
+                const characters = parseCSV(data);
+                populateCharacterSelect(characters);
             });
+    }
+
+    function parseCSV(data) {
+        const lines = data.split('\n');
+        const headers = lines[0].split(',');
+        return lines.slice(1).map(line => {
+            const values = line.split(',');
+            let character = {};
+            headers.forEach((header, index) => {
+                character[header.trim()] = values[index].trim();
+            });
+            return character;
+        });
+    }
+
+    function populateCharacterSelect(characters) {
+        const characterNameSelect = document.getElementById('characterName');
+        characters.forEach(character => {
+            const option = document.createElement('option');
+            option.value = character.name;
+            option.textContent = character.name;
+            characterNameSelect.appendChild(option);
+        });
+        console.log(characters);
     }
 
     function fetchLightConeData(name) {
@@ -72,29 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
         lightConeDetails.description.textContent = lightCone.description;
     }
 
-    fetch('/api/characters')
-        .then(response => response.json())
-        .then(characters => {
-            // 清除“请选择角色”选项
-            characterNameSelect.innerHTML = '';
-            characters.forEach((character, index) => {
-                const option = document.createElement('option');
-                option.value = character.name;
-                option.textContent = character.name;
-                characterNameSelect.appendChild(option);
-                // 默认选择第一个角色
-                if (index === 0) {
-                    characterNameSelect.value = character.name;
-                    fetchCharacterData(character.name)
-                        .then(characterData => updateCharacterDetails(characterData));
-                }
-            });
-            characterNameSelect.disabled = false;
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Failed to fetch character list. Please try again later.');
-        });
+    fetchCharacterData();
 
     // 加载光锥列表
     fetch('/api/lightcones')
